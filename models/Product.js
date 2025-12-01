@@ -11,6 +11,7 @@ const productShema = new mongoose.Schema(
     description: { type: String, required: false },
     isPromotion: { type: Boolean, default: false },
     promotionPrice: { type: Number, required: false },
+    pourcentPromotion: { type: Number, default: 10 },
   },
   { timestamps: true }
 );
