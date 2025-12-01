@@ -10,7 +10,7 @@ import {
   promotedProducts,
   latestProducts,
 } from "../controllers/product.controller.js";
-import { upload } from "../middleware/auth.middleware.js";
+import { upload } from "../middleware/cloudinary.js";
 
 const router = express.Router();
 router.post("/", upload.single("image"), createProduct);

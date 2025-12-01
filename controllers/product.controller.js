@@ -3,9 +3,7 @@ import Product from "../models/Product.js";
 // Créer un produit
 export const createProduct = async (req, res) => {
   try {
-    const imagePath = req.file
-      ? `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`
-      : null;
+    const imagePath = req.file ? req.file.path : null;
     const product = await Product.create({ ...req.body, image: imagePath });
     res.status(201).json(product);
   } catch (error) {
@@ -41,9 +39,7 @@ export const updateProduct = async (req, res) => {
   try {
     const updatedData = { ...req.body };
     if (req.file) {
-      updatedData.image = `${req.protocol}://${req.get("host")}/uploads/${
-        req.file.filename
-      }`;
+      updatedData.image = req.file.path;
     }
     const product = await Product.findByIdAndUpdate(
       req.params.id,
