@@ -88,7 +88,7 @@ export const promotedProducts = async (req, res) => {
     const products = await Product.find({
       isPromotion: true,
     });
-    if (!products || products.length === 0) {
+    if (!products) {
       return res
         .status(404)
         .json({ message: "Aucun product en promotion rencontré" });
