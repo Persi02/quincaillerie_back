@@ -6,28 +6,34 @@ import productRoutes from "./routes/product.routes.js";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 4400;
+const PORT = process.env.PORT || 3000;
 
-//middleware
+// Middleware
 app.use(
   cors({
     origin: "*",
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: "GET,POST,PUT,DELETE",
   })
 );
-app.use("/uploads", express.static("uploads"));
+
 app.use(express.json());
 
+// Servir les images
+app.use("/uploads", express.static("uploads"));
+
+// Routes
 app.use("/api/products", productRoutes);
 
-//connexion DB
+// Connexion DB
 connectDB();
 
+// Test route
 app.get("/", (req, res) => {
-  res.send("cette api est en marche");
+  res.send("API en marche 🚀");
 });
 
+// Start server
 app.listen(PORT, () => {
-  console.log(`server démarré sur port ${PORT}`);
+  console.log(`Server démarré sur port ${PORT}`);
 });
