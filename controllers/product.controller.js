@@ -71,7 +71,9 @@ export const featuredProducts = async (req, res) => {
   try {
     const products = await Product.find({
       isFeatured: true,
-    });
+    })
+      .sort({ updatedAt: -1 })
+      .limit(4);
     if (!products || products.length === 0) {
       return res
         .status(404)
