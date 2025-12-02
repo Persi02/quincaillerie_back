@@ -15,19 +15,42 @@ export const createProduct = async (req, res) => {
 export const getAllProduct = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
+    const category = req.query.category || "";
+    const search = req.query.search || "";
+    const sort = req.query.sort || "desc"; // asc | desc
 
-    const totalProducts = await Product.countDocuments();
+    // Build filters
+    let filters = {};
+
+    if (category && category !== "Tous") {
+      filters.category = category; // exact category
+    }
+
+    if (search) {
+      filters.name = { $regex: search, $options: "i" };
+    }
+
+    // Count total with filters
+    const totalProducts = await Product.countDocuments(filters);
+
+    // Pagination
     const limit = parseInt(req.query.limit) || totalProducts;
     const skip = (page - 1) * limit;
-    const products = await Product.find()
+
+    // Sorting
+    const sortOption = { createdAt: sort === "asc" ? 1 : -1 };
+
+    // Query products
+    const products = await Product.find(filters)
       .skip(skip)
       .limit(limit)
-      .sort({ createdAt: -1 });
+      .sort(sortOption);
+
     res.json({
       page,
       limit,
       totalProducts,
-      totalProducts,
+      totalPages: Math.ceil(totalProducts / limit),
       products,
     });
   } catch (error) {
