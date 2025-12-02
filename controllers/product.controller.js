@@ -14,8 +14,22 @@ export const createProduct = async (req, res) => {
 // Récupérer tous les produits
 export const getAllProduct = async (req, res) => {
   try {
-    const products = await Product.find();
-    res.json(products);
+    const page = parseInt(req.query.page) || 1;
+
+    const totalProducts = await Product.countDocuments();
+    const limit = parseInt(req.query.limit) || totalProducts;
+    const skip = (page - 1) * limit;
+    const products = await Product.find()
+      .skip(skip)
+      .limit(limit)
+      .sort({ createdAt: -1 });
+    res.json({
+      page,
+      limit,
+      totalProducts,
+      totalProducts,
+      products,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
