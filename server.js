@@ -2,9 +2,11 @@ import express from "express";
 import cors from "cors";
 import { connectDB } from "./config/db.js";
 import productRoutes from "./routes/product.routes.js";
+import messageRoutes from "./routes/message.routes.js";
 
 const app = express();
 const PORT = process.env.PORT || 4400;
+app.use(express.json());
 
 // Middleware
 app.use(
@@ -15,13 +17,12 @@ app.use(
   })
 );
 
-app.use(express.json());
-
 // Servir les images
 app.use("/uploads", express.static("uploads"));
 
 // Routes
 app.use("/api/products", productRoutes);
+app.use("/api/messages", messageRoutes);
 
 // Connexion DB
 connectDB();
